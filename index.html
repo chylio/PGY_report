@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGY業務數據視覺化報告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <div class="max-w-7xl mx-auto space-y-12">
+        <header class="text-center mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-800">PGY業務數據視覺化報告</h1>
+            <p class="mt-2 text-lg md:text-xl text-gray-600">讓複雜的數據變得清晰易懂</p>
+        </header>
+
+        <!-- 導覽列 -->
+        <nav class="bg-white shadow-lg rounded-full py-3 px-6 md:px-8 mb-12 sticky top-6 z-50 flex justify-center">
+            <ul class="flex flex-wrap justify-center space-x-4 md:space-x-8">
+                <li><a href="#faculty-ratio-chart" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">師資比率</a></li>
+                <li><a href="#specialty-pie-chart" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">選科意向</a></li>
+                <li><a href="#timeline-section" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">重要時程</a></li>
+            </ul>
+        </nav>
+
+        <!-- 師資比率長條圖 -->
+        <div id="faculty-ratio-chart" class="bg-white shadow-xl rounded-2xl p-6 md:p-8">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">各科別師資比率</h2>
+            <div class="h-96 w-full">
+                <canvas id="barChart"></canvas>
+            </div>
+            <div id="bar-tooltip" class="absolute bg-gray-800 text-white text-sm rounded-lg p-2 transition-opacity duration-300 opacity-0 pointer-events-none z-10"></div>
+        </div>
+
+        <!-- PGY2 選科意向圓餅圖 -->
+        <div id="specialty-pie-chart" class="bg-white shadow-xl rounded-2xl p-6 md:p-8">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">PGY2 選科意向分佈</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="h-80 md:h-96">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <!-- 新的指標卡片設計 -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-gray-700">
+                    <div class="bg-gray-100 rounded-xl p-4 shadow-md">
+                        <p class="text-sm font-medium">符合甄選總人數</p>
+                        <p class="text-4xl font-bold text-blue-600">39</p>
+                    </div>
+                    <div class="bg-gray-100 rounded-xl p-4 shadow-md">
+                        <p class="text-sm font-medium">已填選人數</p>
+                        <p class="text-4xl font-bold text-green-600">32</p>
+                    </div>
+                    <div class="bg-gray-100 rounded-xl p-4 shadow-md">
+                        <p class="text-sm font-medium">未填選人數</p>
+                        <p class="text-4xl font-bold text-red-600">7</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">各科別詳細人數</h3>
+                <div id="specialty-details" class="space-y-6">
+                    <!-- 熱門科別 -->
+                    <div>
+                        <h4 class="text-base font-semibold text-gray-700 mb-2">熱門科別 (選擇人數 ≥ 2)</h4>
+                        <div id="hot-specialties" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            <!-- Hot specialties will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <!-- 其他科別 -->
+                    <div>
+                        <h4 class="text-base font-semibold text-gray-700 mb-2">其他科別 (選擇人數 1)</h4>
+                        <div id="other-specialties" class="text-sm text-gray-600 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                            <!-- Other specialties will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 業務時程甘特圖 -->
+        <div id="timeline-section" class="bg-white shadow-xl rounded-2xl p-6 md:p-8">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">重要業務時程</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">項目</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">114 年 PGY 師資送審</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025/09/12</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">已完成</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">內科訓練示範中心訪查</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025/10/??</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">進行中</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">PGY 說明會</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025/11/22</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">即將到來</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const colors = {
+                green: '#10B981',
+                red: '#EF4444',
+                blue: '#3B82F6',
+                yellow: '#F59E0B',
+                indigo: '#6366F1',
+                purple: '#8B5CF6',
+                pink: '#EC4899',
+                cyan: '#06B6D4',
+                emerald: '#059669',
+                teal: '#0D9488',
+                lime: '#84CC16',
+                orange: '#F97316',
+                rose: '#F43F5E',
+                fuchsia: '#D946EF',
+                sky: '#0EA5E9',
+                violet: '#8B5CF6',
+                stone: '#A8A29E',
+                slate: '#64748B'
+            };
+
+            const data = {
+                barChart: {
+                    labels: ['內科', '兒科', '婦產科', '外科', '急診'],
+                    datasets: [{
+                        label: '一般醫學師資比率',
+                        data: [70, 93, 92, 64, 80],
+                        backgroundColor: [
+                            colors.green, colors.blue, colors.indigo, colors.purple, colors.pink
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        categoryPercentage: 0.7
+                    }]
+                },
+                pieChart: {
+                    labels: [
+                        '家庭醫學科', '內科', '急診', '精神科', '整形外科',
+                        '骨科', '麻醉科', '其他科別'
+                    ],
+                    datasets: [{
+                        data: [8, 4, 4, 3, 2, 2, 2, 10], // 合併 10 個選擇人數為 1 的科別
+                        backgroundColor: [
+                            colors.blue, colors.green, colors.yellow, colors.purple, colors.pink,
+                            colors.cyan, colors.emerald, colors.teal
+                        ],
+                        hoverOffset: 4,
+                    }]
+                },
+                specialtyData: {
+                    labels: [
+                        '家庭醫學科', '內科', '急診', '精神科', '整形外科',
+                        '骨科', '麻醉科', 'GS', '婦產科', '復健科',
+                        '心臟外科', '放射科', '泌尿', '眼科', '神經外科',
+                        '耳鼻喉科', '解剖病理科'
+                    ],
+                    data: [8, 4, 4, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+                }
+            };
+
+            const options = {
+                barChart: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                },
+                                label: function(context) {
+                                    return '比率: ' + context.raw + '%';
+                                }
+                            }
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#4B5563',
+                            font: {
+                                weight: 'bold',
+                                size: 16, // Font size updated
+                            },
+                            formatter: (value) => value + '%',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                },
+                                font: {
+                                    size: 16, // Font size updated
+                                }
+                            },
+                            grid: {
+                                display: true,
+                                color: '#E5E7EB'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 16, // Font size updated
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutQuad'
+                    },
+                },
+                pieChart: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                font: {
+                                    size: 16, // Font size updated
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    return `${label}: ${value}人`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                return value > 2 ? value : '';
+                            },
+                            color: '#fff',
+                            font: {
+                                weight: 'bold',
+                                size: 16
+                            },
+                        }
+                    },
+                    hoverOffset: 16
+                }
+            };
+
+            // Register plugin
+            Chart.register(ChartDataLabels);
+
+            // Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: data.barChart,
+                options: options.barChart,
+                plugins: [{
+                    id: 'welfareLine',
+                    afterDraw(chart) {
+                        const {
+                            ctx,
+                            chartArea: {
+                                top,
+                                bottom,
+                                left,
+                                right,
+                                width,
+                                height
+                            },
+                            scales: {
+                                x,
+                                y
+                            }
+                        } = chart;
+
+                        ctx.save();
+                        
+                        const welfareStandards = [25, 35, 25, 25, 25];
+                        const labels = ['內科', '兒科', '婦產科', '外科', '急診'];
+
+                        welfareStandards.forEach((norm, index) => {
+                            const barX = x.getPixelForValue(labels[index]);
+                            const barWidth = x.getPixelForValue(1) - x.getPixelForValue(0);
+                            const lineY = y.getPixelForValue(norm);
+
+                            ctx.beginPath();
+                            ctx.strokeStyle = colors.yellow;
+                            ctx.lineWidth = 2;
+                            ctx.setLineDash([5, 5]);
+                            ctx.moveTo(barX - (barWidth / 2) + 20, lineY);
+                            ctx.lineTo(barX + (barWidth / 2) - 20, lineY);
+                            ctx.stroke();
+
+                            ctx.fillStyle = colors.yellow;
+                            ctx.font = 'bold 16px Inter';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(`規範 ${norm}%`, barX, lineY - 10);
+                        });
+
+                        ctx.restore();
+                    }
+                }]
+            });
+
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            new Chart(pieCtx, {
+                type: 'doughnut',
+                data: data.pieChart,
+                options: options.pieChart
+            });
+
+            // Populate the detailed specialty sections
+            const hotSpecialtiesDiv = document.getElementById('hot-specialties');
+            const otherSpecialtiesDiv = document.getElementById('other-specialties');
+
+            data.specialtyData.labels.forEach((label, index) => {
+                const count = data.specialtyData.data[index];
+                if (count >= 2) {
+                    const hotCard = document.createElement('div');
+                    hotCard.className = 'bg-blue-100 rounded-xl p-4 flex flex-col items-center justify-center space-y-2 text-center shadow-md';
+                    hotCard.innerHTML = `
+                        <p class="text-xl md:text-2xl font-bold text-blue-800">${label}</p>
+                        <p class="text-3xl md:text-4xl font-extrabold text-blue-900">${count}</p>
+                        <p class="text-sm text-blue-700">選擇人數</p>
+                    `;
+                    hotSpecialtiesDiv.appendChild(hotCard);
+                } else {
+                    const otherItem = document.createElement('div');
+                    otherItem.className = 'p-2 rounded-lg bg-gray-100 text-center font-medium text-gray-700';
+                    otherItem.textContent = label;
+                    otherSpecialtiesDiv.appendChild(otherItem);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
