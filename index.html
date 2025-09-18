@@ -20,7 +20,7 @@
         #internal-recruitment-timeline * {
             font-size: 12px !important;
         }
-        /* 內招時程 schedule-list 標題 24px，四個 schedule-item 40px */
+        /* 內招時程 schedule-list 標題 24px，四個 schedule-item 24px */
         #internal-recruitment-timeline .schedule-list .schedule-title {
             font-size: 24px !important;
             line-height: 1.3;
@@ -57,6 +57,10 @@
         }
         #internal-recruitment-timeline .schedule-list .text-gray-400 {
             color: #9ca3af !important;
+        }
+        /* 新增：讓 schedule-item 內的 span 字體統一為 24px */
+        #internal-recruitment-timeline .schedule-list .schedule-item span {
+            font-size: 36px !important;
         }
         /* 行事曆區塊 */
         .calendar-dot {
@@ -137,6 +141,10 @@
             #internal-recruitment-timeline .schedule-list .schedule-dot {
                 width: 18px;
                 height: 18px;
+            }
+            /* 新增：RWD 時 schedule-item 內的 span 字體較小 */
+            #internal-recruitment-timeline .schedule-list .schedule-item span {
+                font-size: 18px !important;
             }
         }
         /* 加大日曆橫列及縱列距 */
@@ -231,7 +239,7 @@
         <!-- 內招時程行事曆區塊 -->
         <div id="internal-recruitment-timeline" class="bg-white shadow-xl rounded-2xl p-4 sm:p-6 md:p-12 mb-12 border border-gray-200">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-                <!-- schedule-list 標題 24px，四個 schedule-item 36px -->
+                <!-- schedule-list 標題 24px，四個 schedule-item 36px（已在 style 控制） -->
                 <div class="schedule-list">
                     <h2 class="schedule-title font-extrabold text-gray-900 mb-6">內招時程</h2>
                     <div class="schedule-item">
@@ -240,15 +248,15 @@
                     </div>
                     <div class="schedule-item">
                         <span class="schedule-dot dot-blue"></span>
-                        <span class="font-semibold text-gray-900"style="font-size: 30px;">10/2 急診</span>
+                        <span class="font-semibold text-gray-900">10/2 急診</span>
                     </div>
                     <div class="schedule-item">
                         <span class="schedule-dot dot-purple"></span>
-                        <span class="font-semibold text-gray-900 text-3xl">10/16 婦產科</span>
+                        <span class="font-semibold text-gray-900">10/16 婦產科</span>
                     </div>
                     <div class="schedule-item">
                         <span class="schedule-dot dot-green"></span>
-                        <span class="font-semibold text-gray-900 text-lg">10/22 耳鼻喉科</span>
+                        <span class="font-semibold text-gray-900">10/22 耳鼻喉科</span>
                     </div>
                     <div class="mt-8 text-gray-400" style="font-size:24px;">本月內招重要時程</div>
                 </div>
