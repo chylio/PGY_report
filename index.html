@@ -14,6 +14,59 @@
             background-color: #f3f4f6;
             scroll-behavior: smooth;
         }
+        
+        /* Calendar specific styles */
+        .calendar-day {
+            min-height: 80px;
+            position: relative;
+            border-right: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            transition: background-color 0.2s ease;
+        }
+        
+        .calendar-day:hover {
+            background-color: #f9fafb;
+        }
+        
+        .calendar-day.other-month {
+            background-color: #f9fafb;
+            color: #9ca3af;
+        }
+        
+        .calendar-day.today {
+            background-color: #fef3c7;
+            border-color: #f59e0b;
+        }
+        
+        .day-number {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .calendar-event {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            right: 4px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+            color: white;
+        }
+        
+        .event-emergency {
+            background-color: #3b82f6;
+        }
+        
+        .event-ent {
+            background-color: #10b981;
+        }
     </style>
 </head>
 <body class="p-6 md:p-12">
@@ -86,58 +139,44 @@
             </div>
         </div>
 
-        <!-- 內招時程甘特圖 -->
+        <!-- 內招時程行事曆 -->
         <div id="internal-recruitment-timeline" class="bg-white shadow-xl rounded-2xl p-6 md:p-8 mb-12">
             <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">內招時程</h2>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 mb-6">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">科別</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">急診</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10/2</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">耳鼻喉科</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10/22</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- 甘特圖視覺化 -->
-                <div class="relative h-24 w-full bg-gray-50 rounded-lg mb-2 border border-gray-200">
-                    <!-- 10月橫軸 -->
-                    <div class="absolute left-0 right-0 top-0 flex justify-between px-6 text-xs text-gray-400" style="z-index:2">
-                        <span>10/1</span>
-                        <span>10/10</span>
-                        <span>10/20</span>
-                        <span>10/31</span>
+            <div id="calendar-container" class="max-w-full overflow-auto">
+                <div class="calendar-grid min-w-[600px]">
+                    <!-- Calendar Header -->
+                    <div class="calendar-header bg-gray-50 rounded-t-lg p-4 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800 text-center">2024年 10月</h3>
                     </div>
-                    <!-- 條狀圖 -->
-                    <div class="absolute left-0 top-8 flex flex-col space-y-4 w-full px-6" style="z-index:1">
-                        <!-- 急診 -->
-                        <div class="flex items-center space-x-2">
-                            <span class="w-20 text-xs text-gray-700">急診</span>
-                            <div class="relative flex-1 h-3 bg-gray-200 rounded">
-                                <div class="absolute left-[3%] w-8 h-3 bg-blue-400 rounded shadow-lg"></div>
-                                <span class="absolute left-[3%] -top-5 text-xs text-blue-500 font-semibold">10/2</span>
-                            </div>
-                        </div>
-                        <!-- 耳鼻喉科 -->
-                        <div class="flex items-center space-x-2">
-                            <span class="w-20 text-xs text-gray-700">耳鼻喉科</span>
-                            <div class="relative flex-1 h-3 bg-gray-200 rounded">
-                                <div class="absolute left-[67%] w-8 h-3 bg-green-400 rounded shadow-lg"></div>
-                                <span class="absolute left-[67%] -top-5 text-xs text-green-500 font-semibold">10/22</span>
-                            </div>
-                        </div>
+                    
+                    <!-- Days of Week Header -->
+                    <div class="grid grid-cols-7 bg-gray-100">
+                        <div class="p-3 text-center text-sm font-medium text-gray-600 border-r border-gray-200">日</div>
+                        <div class="p-3 text-center text-sm font-medium text-gray-600 border-r border-gray-200">一</div>
+                        <div class="p-3 text-center text-sm font-medium text-gray-600 border-r border-gray-200">二</div>
+                        <div class="p-3 text-center text-sm font-medium text-gray-600 border-r border-gray-200">三</div>
+                        <div class="p-3 text-center text-sm font-medium text-gray-600 border-r border-gray-200">四</div>
+                        <div class="p-3 text-center text-sm font-medium text-gray-600 border-r border-gray-200">五</div>
+                        <div class="p-3 text-center text-sm font-medium text-gray-600">六</div>
+                    </div>
+                    
+                    <!-- Calendar Days -->
+                    <div class="grid grid-cols-7" id="calendar-days">
+                        <!-- Days will be populated by JavaScript -->
                     </div>
                 </div>
-                <div class="text-xs text-gray-400 text-right pr-6">* 甘特圖僅示意橫軸為10月份</div>
+                
+                <!-- Legend -->
+                <div class="mt-4 flex flex-wrap gap-4 justify-center">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                        <span class="text-sm text-gray-600">急診</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-green-500 rounded"></div>
+                        <span class="text-sm text-gray-600">耳鼻喉科</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -431,6 +470,130 @@
                     otherSpecialtiesDiv.appendChild(otherItem);
                 }
             });
+
+            // Generate Calendar for Internal Recruitment Timeline
+            function generateCalendar() {
+                const calendarDays = document.getElementById('calendar-days');
+                
+                // Calendar events data
+                const events = {
+                    2: { name: '急診', class: 'event-emergency' },
+                    22: { name: '耳鼻喉科', class: 'event-ent' }
+                };
+                
+                // Generate October 2024 calendar
+                const year = 2024;
+                const month = 9; // October (0-indexed)
+                const today = new Date();
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const startDate = new Date(firstDay);
+                startDate.setDate(startDate.getDate() - firstDay.getDay()); // Start from Sunday
+                
+                // Generate 6 weeks of calendar (42 days)
+                for (let i = 0; i < 42; i++) {
+                    const currentDate = new Date(startDate);
+                    currentDate.setDate(startDate.getDate() + i);
+                    
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'calendar-day';
+                    
+                    const dayNumber = currentDate.getDate();
+                    const isCurrentMonth = currentDate.getMonth() === month;
+                    const isToday = currentDate.toDateString() === today.toDateString();
+                    
+                    if (!isCurrentMonth) {
+                        dayDiv.classList.add('other-month');
+                    }
+                    
+                    if (isToday) {
+                        dayDiv.classList.add('today');
+                    }
+                    
+                    // Add day number
+                    const dayNumberDiv = document.createElement('div');
+                    dayNumberDiv.className = 'day-number';
+                    dayNumberDiv.textContent = dayNumber;
+                    dayDiv.appendChild(dayNumberDiv);
+                    
+                    // Add event if exists for this day and it's the current month
+                    if (isCurrentMonth && events[dayNumber]) {
+                        const eventDiv = document.createElement('div');
+                        eventDiv.className = `calendar-event ${events[dayNumber].class}`;
+                        eventDiv.textContent = events[dayNumber].name;
+                        dayDiv.appendChild(eventDiv);
+                    }
+                    
+                    calendarDays.appendChild(dayDiv);
+                }
+            }
+            
+            // Initialize calendar
+            generateCalendar();
+        });
+        
+        // Separate calendar initialization to ensure it runs even if Chart.js fails
+        document.addEventListener('DOMContentLoaded', () => {
+            // Generate Calendar for Internal Recruitment Timeline (fallback)
+            function generateCalendarFallback() {
+                const calendarDays = document.getElementById('calendar-days');
+                if (!calendarDays || calendarDays.children.length > 0) return; // Already populated
+                
+                // Calendar events data
+                const events = {
+                    2: { name: '急診', class: 'event-emergency' },
+                    22: { name: '耳鼻喉科', class: 'event-ent' }
+                };
+                
+                // Generate October 2024 calendar
+                const year = 2024;
+                const month = 9; // October (0-indexed)
+                const today = new Date();
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const startDate = new Date(firstDay);
+                startDate.setDate(startDate.getDate() - firstDay.getDay()); // Start from Sunday
+                
+                // Generate 6 weeks of calendar (42 days)
+                for (let i = 0; i < 42; i++) {
+                    const currentDate = new Date(startDate);
+                    currentDate.setDate(startDate.getDate() + i);
+                    
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'calendar-day';
+                    
+                    const dayNumber = currentDate.getDate();
+                    const isCurrentMonth = currentDate.getMonth() === month;
+                    const isToday = currentDate.toDateString() === today.toDateString();
+                    
+                    if (!isCurrentMonth) {
+                        dayDiv.classList.add('other-month');
+                    }
+                    
+                    if (isToday) {
+                        dayDiv.classList.add('today');
+                    }
+                    
+                    // Add day number
+                    const dayNumberDiv = document.createElement('div');
+                    dayNumberDiv.className = 'day-number';
+                    dayNumberDiv.textContent = dayNumber;
+                    dayDiv.appendChild(dayNumberDiv);
+                    
+                    // Add event if exists for this day and it's the current month
+                    if (isCurrentMonth && events[dayNumber]) {
+                        const eventDiv = document.createElement('div');
+                        eventDiv.className = `calendar-event ${events[dayNumber].class}`;
+                        eventDiv.textContent = events[dayNumber].name;
+                        dayDiv.appendChild(eventDiv);
+                    }
+                    
+                    calendarDays.appendChild(dayDiv);
+                }
+            }
+            
+            // Run fallback calendar generation
+            setTimeout(generateCalendarFallback, 100);
         });
     </script>
 </body>
