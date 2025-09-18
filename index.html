@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PGY業務數據視覺化報告</title>
+    <title>PGY業務報告</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -20,29 +20,29 @@
 
     <div class="max-w-7xl mx-auto space-y-12">
         <header class="text-center mb-12">
-            <h1 class="text-3xl md:text-5xl font-bold text-gray-800">PGY業務數據視覺化報告</h1>
-            <p class="mt-2 text-lg md:text-xl text-gray-600">讓複雜的數據變得清晰易懂</p>
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-800">PGY業務報告</h1>
+            <p class="mt-2 text-lg md:text-xl text-gray-600"></p>
         </header>
 
         <!-- 導覽列 -->
         <nav class="bg-white shadow-lg rounded-full py-3 px-6 md:px-8 mb-12 sticky top-6 z-50 flex justify-center">
             <ul class="flex flex-wrap justify-center space-x-4 md:space-x-8">
-                <li><a href="#faculty-ratio-chart" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">師資比率</a></li>
-                <li><a href="#specialty-pie-chart" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">選科意向</a></li>
-                <li><a href="#timeline-section" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">重要時程</a></li>
+                <li><a href="#faculty-ratio-chart" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">一般醫學師資比率</a></li>
+                <li><a href="#specialty-pie-chart" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">PGY2 住院醫師選科意向</a></li>
+                <li><a href="#timeline-section" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-200">近期活動</a></li>
             </ul>
         </nav>
 
         <!-- 師資比率長條圖 -->
         <div id="faculty-ratio-chart" class="bg-white shadow-xl rounded-2xl p-6 md:p-8">
-            <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">各科別師資比率</h2>
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">各科師資比率</h2>
             <div class="h-96 w-full">
                 <canvas id="barChart"></canvas>
             </div>
             <div id="bar-tooltip" class="absolute bg-gray-800 text-white text-sm rounded-lg p-2 transition-opacity duration-300 opacity-0 pointer-events-none z-10"></div>
         </div>
 
-        <!-- PGY2 選科意向圓餅圖 -->
+        <!-- PGY2 選科意向 -->
         <div id="specialty-pie-chart" class="bg-white shadow-xl rounded-2xl p-6 md:p-8">
             <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">PGY2 選科意向分佈</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -52,7 +52,7 @@
                 <!-- 新的指標卡片設計 -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-gray-700">
                     <div class="bg-gray-100 rounded-xl p-4 shadow-md">
-                        <p class="text-sm font-medium">符合甄選總人數</p>
+                        <p class="text-sm font-medium">符合甄選調查人數</p>
                         <p class="text-4xl font-bold text-blue-600">39</p>
                     </div>
                     <div class="bg-gray-100 rounded-xl p-4 shadow-md">
@@ -70,14 +70,14 @@
                 <div id="specialty-details" class="space-y-6">
                     <!-- 熱門科別 -->
                     <div>
-                        <h4 class="text-base font-semibold text-gray-700 mb-2">熱門科別 (選擇人數 ≥ 2)</h4>
+                        <h4 class="text-base font-semibold text-gray-700 mb-2">選擇人數 ≧2 的科別</h4>
                         <div id="hot-specialties" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             <!-- Hot specialties will be populated by JavaScript -->
                         </div>
                     </div>
                     <!-- 其他科別 -->
                     <div>
-                        <h4 class="text-base font-semibold text-gray-700 mb-2">其他科別 (選擇人數 1)</h4>
+                        <h4 class="text-base font-semibold text-gray-700 mb-2">選擇人數 1 的科別)</h4>
                         <div id="other-specialties" class="text-sm text-gray-600 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                             <!-- Other specialties will be populated by JavaScript -->
                         </div>
@@ -107,10 +107,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">內科訓練示範中心訪查</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">一般醫學內科訓練示範中心訪查</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025/10/??</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">進行中</span>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">準備中</span>
                             </td>
                         </tr>
                         <tr>
