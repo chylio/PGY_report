@@ -86,6 +86,61 @@
             </div>
         </div>
 
+        <!-- 內招時程甘特圖 -->
+        <div id="internal-recruitment-timeline" class="bg-white shadow-xl rounded-2xl p-6 md:p-8 mb-12">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">內招時程</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 mb-6">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">科別</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">急診</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10/2</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">耳鼻喉科</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10/22</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- 甘特圖視覺化 -->
+                <div class="relative h-24 w-full bg-gray-50 rounded-lg mb-2 border border-gray-200">
+                    <!-- 10月橫軸 -->
+                    <div class="absolute left-0 right-0 top-0 flex justify-between px-6 text-xs text-gray-400" style="z-index:2">
+                        <span>10/1</span>
+                        <span>10/10</span>
+                        <span>10/20</span>
+                        <span>10/31</span>
+                    </div>
+                    <!-- 條狀圖 -->
+                    <div class="absolute left-0 top-8 flex flex-col space-y-4 w-full px-6" style="z-index:1">
+                        <!-- 急診 -->
+                        <div class="flex items-center space-x-2">
+                            <span class="w-20 text-xs text-gray-700">急診</span>
+                            <div class="relative flex-1 h-3 bg-gray-200 rounded">
+                                <div class="absolute left-[3%] w-8 h-3 bg-blue-400 rounded shadow-lg"></div>
+                                <span class="absolute left-[3%] -top-5 text-xs text-blue-500 font-semibold">10/2</span>
+                            </div>
+                        </div>
+                        <!-- 耳鼻喉科 -->
+                        <div class="flex items-center space-x-2">
+                            <span class="w-20 text-xs text-gray-700">耳鼻喉科</span>
+                            <div class="relative flex-1 h-3 bg-gray-200 rounded">
+                                <div class="absolute left-[67%] w-8 h-3 bg-green-400 rounded shadow-lg"></div>
+                                <span class="absolute left-[67%] -top-5 text-xs text-green-500 font-semibold">10/22</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs text-gray-400 text-right pr-6">* 甘特圖僅示意橫軸為10月份</div>
+            </div>
+        </div>
+
         <!-- 業務時程甘特圖 -->
         <div id="timeline-section" class="bg-white shadow-xl rounded-2xl p-6 md:p-8">
             <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">近期活動</h2>
