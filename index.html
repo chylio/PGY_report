@@ -20,12 +20,10 @@
         #internal-recruitment-timeline * {
             font-size: 12px !important;
         }
-        /* 內招時程 schedule-list 標題 24px */
         #internal-recruitment-timeline .schedule-list .schedule-title {
             font-size: 24px !important;
             line-height: 1.3;
         }
-        /* schedule-item 外框 40px，但內文統一20px */
         #internal-recruitment-timeline .schedule-list .schedule-item {
             font-size: 40px !important;
             display: flex;
@@ -33,7 +31,6 @@
             gap: 0.75rem;
             margin-bottom: 1.5rem;
         }
-        /* schedule-item 內四行文字字體統一 20px */
         #internal-recruitment-timeline .schedule-list .schedule-item span {
             font-size: 20px !important;
         }
@@ -63,7 +60,6 @@
         #internal-recruitment-timeline .schedule-list .text-gray-400 {
             color: #9ca3af !important;
         }
-        /* RWD: schedule-item 內的 span 字體變小 */
         @media (max-width: 640px) {
             #internal-recruitment-timeline td, #internal-recruitment-timeline th {
                 padding-left: 0.2rem !important;
@@ -90,12 +86,10 @@
                 width: 18px;
                 height: 18px;
             }
-            /* schedule-item 內 span 字體 12px */
             #internal-recruitment-timeline .schedule-list .schedule-item span {
                 font-size: 12px !important;
             }
         }
-        /* 行事曆區塊 */
         .calendar-dot {
             display: inline-flex;
             align-items: center;
@@ -144,7 +138,6 @@
             background: #bbf7d0;
             color: #166534;
         }
-        /* 日期數字(非特殊圈圈)也要大 */
         #internal-recruitment-timeline .calendar-table-date {
             font-size: 20px !important;
             font-weight: 500;
@@ -161,7 +154,6 @@
                 padding-bottom: 0.1rem;
             }
         }
-        /* 加大日曆橫列及縱列距 */
         #internal-recruitment-timeline table tr {
             height: 52px !important;
         }
@@ -184,7 +176,6 @@
                 padding-bottom: 0.1rem;
             }
         }
-        /* 近期活動表格文字字體大小 18px，RWD 下仍為 18px */
         #timeline-section table,
         #timeline-section th,
         #timeline-section td {
@@ -196,6 +187,9 @@
             #timeline-section td {
                 font-size: 18px !important;
             }
+        }
+        .recruit-btn {
+            font-size: 28px !important;
         }
     </style>
 </head>
@@ -266,7 +260,6 @@
         <!-- 內招時程行事曆區塊 -->
         <div id="internal-recruitment-timeline" class="bg-white shadow-xl rounded-2xl p-4 sm:p-6 md:p-12 mb-12 border border-gray-200">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-                <!-- schedule-list 標題 24px，四個 schedule-item 20px（已在 style 控制） -->
                 <div class="schedule-list">
                     <h2 class="schedule-title font-extrabold text-gray-900 mb-6">內招時程</h2>
                     <div class="schedule-item">
@@ -288,11 +281,10 @@
                     <div class="mt-8 text-gray-400" style="font-size:24px;">
                         本月內招重要時程
                     </div>
-                    <!-- 招募資訊按鈕靠左 -->
                     <div class="mt-4 flex justify-start">
                         <a href="https://chylio.github.io/r-recruit/"
                            target="_blank"
-                           class="inline-block px-6 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg shadow transition-colors duration-200">
+                           class="inline-block px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition-colors duration-200 recruit-btn">
                             招募資訊
                         </a>
                     </div>
@@ -429,7 +421,7 @@
                 blue: '#3B82F6',
                 yellow: '#F59E0B',
                 indigo: '#6366F1',
-                purple: '#a78bfa', // 婦產科
+                purple: '#a78bfa',
                 pink: '#EC4899',
                 cyan: '#06B6D4',
                 emerald: '#059669',
@@ -444,14 +436,23 @@
                 slate: '#64748B'
             };
 
+            // 師資細節資料（新排序：內科、外科、急診、兒科、婦產科）
+            const facultyDetail = [
+                { label: '內科', main: 67, faculty: 47, percent: 70 },
+                { label: '外科', main: 42, faculty: 27, percent: 64 },
+                { label: '急診', main: 40, faculty: 32, percent: 80 },
+                { label: '兒科', main: 15, faculty: 14, percent: 93 },
+                { label: '婦產科', main: 13, faculty: 12, percent: 92 }
+            ];
+
             const data = {
                 barChart: {
-                    labels: ['內科', '兒科', '婦產科', '外科', '急診'],
+                    labels: facultyDetail.map(d => d.label),
                     datasets: [{
                         label: '一般醫學師資比率',
-                        data: [70, 93, 92, 64, 80],
+                        data: facultyDetail.map(d => d.percent),
                         backgroundColor: [
-                            colors.green, colors.blue, colors.indigo, colors.purple, colors.pink
+                            colors.green, colors.blue, colors.pink, colors.indigo, colors.purple
                         ],
                         borderWidth: 1,
                         borderRadius: 8,
@@ -464,7 +465,7 @@
                         '骨科', '麻醉科', '其他科別'
                     ],
                     datasets: [{
-                        data: [8, 4, 4, 3, 2, 2, 2, 10], // 合併 10 個選擇人數為 1 的科別
+                        data: [8, 4, 4, 3, 2, 2, 2, 10],
                         backgroundColor: [
                             colors.blue, colors.green, colors.yellow, colors.purple, colors.pink,
                             colors.cyan, colors.emerald, colors.teal
@@ -497,7 +498,13 @@
                                     return context[0].label;
                                 },
                                 label: function(context) {
-                                    return '比率: ' + context.raw + '%';
+                                    const idx = context.dataIndex;
+                                    const d = facultyDetail[idx];
+                                    return [
+                                        `主治醫師人數：${d.main} 人`,
+                                        `一般醫學師資：${d.faculty} 人`,
+                                        `師資比：${d.percent}%`
+                                    ];
                                 }
                             }
                         },
@@ -613,8 +620,9 @@
 
                         ctx.save();
 
+                        // 新順序下衛福部規範也需對應順序
                         const welfareStandards = [35, 25, 25, 25, 25];
-                        const labels = ['內科', '兒科', '婦產科', '外科', '急診'];
+                        const labels = facultyDetail.map(d => d.label);
 
                         welfareStandards.forEach((norm, index) => {
                             const barX = x.getPixelForValue(labels[index]);
